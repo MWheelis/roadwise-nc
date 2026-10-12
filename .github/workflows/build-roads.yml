@@ -1,0 +1,77 @@
+
+name: Build Road Data
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Download downtown New Bern roads
+        run: |
+          python3 - <<'PYCODE'
+          import json
+          import urllib.parse
+          import urllib.request
+
+          bbox = "35.095,-77.063,35.123,-77.025"
+          query = f'[out:json][timeout:60];way["highway"]["name"]({bbox});out geom;'
+
+          servers = [
+              "https://overpass.kumi.systems/api/interpreter",
+              "https://overpass.private.coffee/api/interpreter",
+              "https://overpass-api.de/api/interpreter"
+          ]
+
+          for server in servers:
+              try:
+                  body = urllib.parse.urlencode({"data": query}).encode()
+                  request = urllib.request.Request(
+                      server,
+                      data=body,
+                      headers={
+                          "User-Agent": "RoadWise-NC-educational-prototype/0.10",
+                          "Content-Type": "application/x-www-form-urlencoded"
+                      }
+                  )
+                  with urllib.request.urlopen(request, timeout=75) as response:
+                      data = json.load(response)
+
+                  roads = [
+                      item for item in data.get("elements", [])
+                      if item.get("type") == "way"
+                      and item.get("tags", {}).get("name")
+                      and len(item.get("geometry", [])) >= 2
+                  ]
+
+                  if len(roads) < 10:
+                      raise RuntimeError("Insufficient road data returned")
+
+                  with open("roads.json", "w") as file:
+                      json.dump({"elements": roads}, file)
+
+                  print(f"Saved {len(roads)} road segments")
+                  break
+
+              except Exception as error:
+                  print(f"{server} failed: {error}")
+          else:
+              raise RuntimeError("All road data servers failed")
+          PYCODE
+
+      - name: Save roads to repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add roads.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Add New Bern road data"
+            git push
+          fi
