@@ -4,7 +4,7 @@
 .maptools{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin:15px 0}.maptools button{font-size:13px}.maphint{background:#203d49;border:1px solid #416273;border-radius:12px;padding:14px;margin-top:12px;color:#d5e5eb}.maphint strong{color:#82e0c4}.maplegend{color:#aac5d1;font-size:12px;margin-top:10px}.mapquiz{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:#18343f;border:1px solid #315b66;border-radius:12px;padding:15px;margin-top:15px}.mapquiz p{margin:4px 0 0}.mapstatus{font-size:13px;color:#b7d2dc}.mapbox{height:530px;position:relative;background:#19333f}.mapbox iframe{width:100%;height:100%;border:0}.btn.activeMode{box-shadow:0 0 0 2px #9aedd5 inset}.loadingmask{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;background:#203743;color:#d8e9eb;padding:20px}
 
 .nr-layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,.7fr);gap:16px}.nr-map{height:520px;background:#e9eee9;border-radius:13px;overflow:hidden;position:relative}.nr-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.nr-input{flex:1;min-width:180px;padding:12px;border-radius:10px;border:1px solid #4b6d73;background:#102735;color:#fff;font:inherit}.nr-kpi{font-size:26px;font-weight:800;color:#78ddbd}.nr-help{font-size:13px;color:#c2d4df}.nr-error{color:#ff9b9b}.nr-ok{color:#84e4b8}.nr-road-label{font-size:12px;font-weight:800;color:#133b32;background:#def8ed;border-radius:4px;padding:3px 5px;border:1px solid #34967b;white-space:nowrap}.nr-spinner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:25px;text-align:center;background:#e9eee9;color:#243b44;z-index:900}.nr-map .leaflet-container{background:#e9eee9}@media(max-width:850px){.nr-layout{grid-template-columns:1fr}.nr-map{height:390px}}
-</style></head><body><main class="wrap"><header class="top"><div class="logo">↗ Road<span>Wise</span><span style="font-size:12px;color:#a8c2cc;font-weight:600;letter-spacing:0;margin-left:12px">NC BETA 0.9</span></div><div class="pill">Craven → Alamance → Wake</div></header><section class="hero"><div class="panel"><div class="eyebrow">Learn the roads. Not just the route.</div><h1>Know your way around.<br>Even without GPS.</h1><p>Learn North Carolina road systems, memorize Craven County's important corridors, and practice finding your way using real geography.</p><div class="badges"><span class="badge">🧭 Road literacy</span><span class="badge">🗺️ Regional memory</span><span class="badge">🏆 Challenges</span></div></div><div class="panel"><div class="eyebrow">Road quiz accuracy · on this device</div><div class="stat" id="mastery">0%</div><div class="progress"><div id="masterbar"></div></div><p class="small">Correct answers out of completed quiz questions. Practice builds familiarity over time.</p><div class="divider"></div><div class="eyebrow">Current region</div><h2 style="margin-bottom:5px">Craven County, NC</h2><div class="muted small">Alamance and Wake are planned for upcoming releases.</div></div></section><nav class="tabs" aria-label="Training modules"><button class="tab active" data-tab="academy">01 · Road Academy</button><button class="tab" data-tab="map">02 · Explore Map</button><button class="tab" data-tab="nameroad">03 · Name That Road</button><button class="tab" data-tab="memory">04 · Memory Quiz</button><button class="tab" data-tab="routes">05 · Route Lab</button><button class="tab" data-tab="roadmap">What's next</button></nav><div id="view"></div><div class="footer">Prototype for stationary study only. Not a navigation, dispatch, or emergency-response tool. Current road conditions and hospital services must be verified independently.</div></main><script>
+</style></head><body><main class="wrap"><header class="top"><div class="logo">↗ Road<span>Wise</span><span style="font-size:12px;color:#a8c2cc;font-weight:600;letter-spacing:0;margin-left:12px">NC BETA 1.0 PREVIEW</span></div><div class="pill">Craven → Alamance → Wake</div></header><section class="hero"><div class="panel"><div class="eyebrow">Learn the roads. Not just the route.</div><h1>Know your way around.<br>Even without GPS.</h1><p>Learn North Carolina road systems, memorize Craven County's important corridors, and practice finding your way using real geography.</p><div class="badges"><span class="badge">🧭 Road literacy</span><span class="badge">🗺️ Regional memory</span><span class="badge">🏆 Challenges</span></div></div><div class="panel"><div class="eyebrow">Road quiz accuracy · on this device</div><div class="stat" id="mastery">0%</div><div class="progress"><div id="masterbar"></div></div><p class="small">Correct answers out of completed quiz questions. Practice builds familiarity over time.</p><div class="divider"></div><div class="eyebrow">Current region</div><h2 style="margin-bottom:5px">Craven County, NC</h2><div class="muted small">Alamance and Wake are planned for upcoming releases.</div></div></section><nav class="tabs" aria-label="Training modules"><button class="tab active" data-tab="academy">01 · Road Academy</button><button class="tab" data-tab="map">02 · Explore Map</button><button class="tab" data-tab="nameroad">03 · Name That Road</button><button class="tab" data-tab="memory">04 · Memory Quiz</button><button class="tab" data-tab="routes">05 · Route Lab</button><button class="tab" data-tab="roadmap">What's next</button></nav><div id="view"></div><div class="footer">Prototype for stationary study only. Not a navigation, dispatch, or emergency-response tool. Current road conditions and hospital services must be verified independently.</div></main><script>
 const ROAD_LIST=[['US 70','Principal east–west corridor through New Bern and toward Havelock','us'],['US 17','Major north–south corridor through the New Bern area','us'],['NC 55','Connects New Bern with communities toward the east and west','nc'],['NC 43','Important connection between New Bern and Vanceboro','nc'],['NC 101','Corridor connecting the Havelock area toward the coast','nc'],['NC 118','Route serving the northern part of Craven County','nc']];
 const ROAD_SIGN_LESSON=`<div class="panel"><div class="eyebrow">Start here · Plain-English road vocabulary</div><h2>What exactly is a road corridor?</h2><p>A <strong>corridor</strong> is a broad travel connection between places, often named after the main highway that carries people through it. It can include nearby connecting roads and other transportation options. When we say the <strong>US 70 corridor</strong> between New Bern and Havelock, think <em>the main travel path linking those communities</em>—not a special new kind of road or road sign.</p><div class="notice"><strong>Remember:</strong> A route is a numbered or named road. A corridor is the larger travel connection that road helps provide. The two terms aren't interchangeable.</div><div class="divider"></div><h2>How to recognize highway route markers</h2><p>These symbols are called <strong>route shields</strong> or <strong>route markers</strong>. The shape and colors tell you what kind of numbered route you are following.</p>
 <div class="signcards"><div class="signcard"><svg viewBox="0 0 120 110" role="img" aria-label="Black and white U.S. Route 70 shield"><path d="M16 13 Q60 4 104 13 L104 51 Q104 77 60 100 Q16 77 16 51Z" fill="white" stroke="#111" stroke-width="5"/><text x="60" y="66" fill="#111" font-size="39" text-anchor="middle" font-weight="800">70</text></svg><strong>US 70 · U.S. Route</strong><span>Black numbers on a white shield. A U.S. numbered highway can have stoplights and intersections; it is <strong>not automatically</strong> an Interstate.</span></div>
@@ -74,7 +74,30 @@ function nextMapChallenge(){challengeIndex=(challengeIndex+1)%MAP_CHALLENGES.len
 function focusTown(n){if(roadMap&&TOWNS[n]){let v=TOWNS[n];roadMap.setView([v[0],v[1]],v[2]);}else{const st=document.getElementById('mapstatus');if(st)st.textContent='Map not loaded. Open the HTML in a browser with internet access.'}}
 function toggleLabels(force){const st=document.getElementById('mapstatus');if(st)st.textContent='Hidden road labels are temporarily unavailable while we implement a reliable map layer. The real, labeled OpenStreetMap map remains usable.';const b=document.getElementById('labelbtn');if(b){b.textContent='Hide labels · Coming soon';b.disabled=true;}}
 function loadLeaflet(){return new Promise((resolve,reject)=>{if(window.L){resolve();return}let link=document.createElement('link');link.rel='stylesheet';link.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(link);let js=document.createElement('script');js.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';js.onload=resolve;js.onerror=()=>reject(new Error('Mapping library blocked'));document.head.appendChild(js)})}
-async function initRealMap(){labelsHidden=false;try{await loadLeaflet();if(tab!=='map')return;let container=document.getElementById('realmap');if(!container)return;roadMap=L.map(container,{zoomControl:true,attributionControl:true}).setView([35.1085,-77.0441],12);mapInstance={remove:()=>{roadMap?.remove();roadMap=null;labeledLayer=null;blankLayer=null}};labeledLayer=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors',maxZoom:19});blankLayer=null;let loaded=false;labeledLayer.on('tileload',()=>{loaded=true;document.getElementById('mapload')?.remove();const x=document.getElementById('mapstatus');if(x)x.textContent='Real map ready. Explore real streets and highway connections. Label hiding is temporarily unavailable.'});labeledLayer.on('tileerror',()=>{const x=document.getElementById('mapstatus');if(x&&!loaded)x.textContent='Map tiles are unavailable. Try this site in a regular browser or use the OpenStreetMap link above.';const mask=document.getElementById('mapload');if(mask&&!loaded)mask.innerHTML='Map imagery is blocked by your browser or network. <a href="https://www.openstreetmap.org/#map=12/35.108/-77.044" target="_blank" rel="noopener noreferrer" style="color:#85e7db">Open the real Craven County map ↗</a>'});labeledLayer.addTo(roadMap);setTimeout(()=>{roadMap?.invalidateSize()},200); }catch(err){const x=document.getElementById('mapstatus');if(x)x.textContent='Interactive map library could not load here. Use the OpenStreetMap link above, or open the downloaded HTML in Chrome / Safari with internet access.';const m=document.getElementById('mapload');if(m)m.innerHTML='Map library unavailable. <a href="https://www.openstreetmap.org/#map=12/35.108/-77.044" target="_blank" rel="noopener noreferrer" style="color:#85e7db">Open real Craven County map in OpenStreetMap ↗</a>';}}
+async function initRealMap(){labelsHidden=false;try{await loadLeaflet();if(tab!=='map')return;let container=document.getElementById('realmap');if(!container)return;roadMap=L.map(container,{zoomControl:true,attributionControl:true}).setView([35.1085,-77.0441],12);mapInstance={remove:()=>{roadMap?.remove();roadMap=null;labeledLayer=null;blankLayer=null}};labeledLayer=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors',maxZoom:19});blankLayer=null;let loaded=false;labeledLayer.on('tileload',()=>{loaded=true;document.getElementById('mapload')?.remove();const x=document.getElementById('mapstatus');if(x)x.textContent='Real map ready. Explore real streets and highway connections. Label hiding is temporarily unavailable.'});labeledLayer.on('tileerror',()=>{if(!window.roadWiseVectorFallback){window.roadWiseVectorFallback=true;showRoadVectorFallback();}const x=document.getElementById('mapstatus');if(x&&!loaded)x.textContent='Map tiles are unavailable. Try this site in a regular browser or use the OpenStreetMap link above.';const mask=document.getElementById('mapload');if(mask&&!loaded)mask.innerHTML='Map imagery is blocked by your browser or network. <a href="https://www.openstreetmap.org/#map=12/35.108/-77.044" target="_blank" rel="noopener noreferrer" style="color:#85e7db">Open the real Craven County map ↗</a>'});labeledLayer.addTo(roadMap);setTimeout(()=>{roadMap?.invalidateSize()},200); }catch(err){const x=document.getElementById('mapstatus');if(x)x.textContent='Interactive map library could not load here. Use the OpenStreetMap link above, or open the downloaded HTML in Chrome / Safari with internet access.';const m=document.getElementById('mapload');if(m)m.innerHTML='Map library unavailable. <a href="https://www.openstreetmap.org/#map=12/35.108/-77.044" target="_blank" rel="noopener noreferrer" style="color:#85e7db">Open real Craven County map in OpenStreetMap ↗</a>';}}
+
+
+// If tile hosting refuses requests, show the real road geometry cached on GitHub Pages.
+// This fallback covers the downtown New Bern starter area rather than all Craven County.
+async function showRoadVectorFallback(){
+ try{
+  const u=new URL('roads.json',window.location.href);u.search='';
+  const resp=await fetch(u.toString(),{cache:'no-store'});if(!resp.ok)throw Error('Road data has not yet been generated.');
+  const data=await resp.json();if(!roadMap||tab!=='map')return;
+  if(labeledLayer)roadMap.removeLayer(labeledLayer);
+  const ways=(data.elements||[]).filter(w=>w.tags?.name&&w.geometry?.length>=2);
+  if(!ways.length)throw Error('No roads in saved dataset.');
+  const roads=L.layerGroup();let bounds=[];
+  for(const w of ways){if(['footway','path','cycleway','steps','track','service'].includes(w.tags.highway))continue;
+   let coords=w.geometry.map(p=>[p.lat,p.lon]);bounds.push(...coords);
+   L.polyline(coords,{color:'#72a8a6',weight:4,opacity:.85}).bindTooltip(w.tags.name,{sticky:true}).addTo(roads);
+  }
+  roads.addTo(roadMap);
+  if(bounds.length)roadMap.fitBounds(L.latLngBounds(bounds).pad(.04));
+  const mask=document.getElementById('mapload');if(mask)mask.remove();
+  const x=document.getElementById('mapstatus');if(x)x.textContent='RoadWise fallback: showing real downtown New Bern streets from saved OpenStreetMap data. Hover or tap a road for its name. This is not the full county basemap.';
+ }catch(err){const x=document.getElementById('mapstatus');if(x)x.textContent='Map tiles blocked and saved road dataset unavailable: '+err.message;}
+}
 
 // Name That Road: real, georeferenced OpenStreetMap way geometry loaded directly through Overpass.
 // No basemap tiles are used in this game, so visible street names cannot spoil the answers.
@@ -84,83 +107,58 @@ const nrNormalize=v=>String(v||'').toLowerCase().normalize('NFKD').replace(/\b(s
 function nrAliases(r){const names=[r.name,...r.alts];for(const x of [...names]){const v=x.toLowerCase();if(/^us\s*(highway\s*)?\d+/.test(v)){const n=v.match(/\d+/)[0];names.push('US '+n,'US Highway '+n,'Highway '+n)}if(/^nc\s*(highway\s*)?\d+/.test(v)){const n=v.match(/\d+/)[0];names.push('NC '+n,'NC Highway '+n)}}return names.map(nrNormalize)}
 function nrDistance(coords){let m=0;for(let i=1;i<coords.length;i++){const a=coords[i-1],b=coords[i],t=(a[0]+b[0])/2*Math.PI/180; m+=Math.hypot((b[0]-a[0])*111000,(b[1]-a[1])*111000*Math.cos(t))}return m}
 function nrStatus(txt,cls=''){const e=document.getElementById('nr-status');if(e){e.className='nr-help '+cls;e.textContent=txt}}
-function nrRenderStats(){const total=nrPool.length;const e=document.getElementById('nr-count');if(e)e.textContent=`${nrDone.size} / ${total}`;const p=document.getElementById('nr-progress');if(p)p.style.width=(total?nrDone.size/total*100:0)+'%';const score=document.getElementById('nr-score');if(score)score.textContent=String(nrScore);const list=document.getElementById('nr-done-list');if(list)list.textContent=nrPool.filter(x=>nrDone.has(x.name)).map(x=>x.name).join(' · ')||'Correctly named roads will appear here.'} 
-function nrPaint() {
-  if (!nrMap) return;
-
-  nrLabels.forEach(label => nrMap.removeLayer(label));
-  nrLabels = [];
-
-  nrLayers.forEach(o => {
-    const style = nrDone.has(o.road.name)
-      ? { color: '#24a77d', weight: 6, opacity: 0.9 }
-      : o.index === nrCurrent
-        ? { color: '#f1aa30', weight: 9, opacity: 1 }
-        : { color: '#889c9b', weight: 3, opacity: 0.7 };
-
-    o.layer.eachLayer(segment => {
-      segment.setStyle(style);
-      if (nrDone.has(o.road.name)) segment.bringToFront();
-    });
-  });
-
-  for (const road of nrPool.filter(r => nrDone.has(r.name))) {
-    const segment = road.parts.reduce(
-      (a, b) => a.length >= b.length ? a : b, []
-    );
-    if (!segment.length) continue;
-
-    const position = segment[Math.floor(segment.length / 2)];
-
-    nrLabels.push(
-      L.marker(position, {
-        interactive: false,
-        icon: L.divIcon({
-          className: '',
-          html: `<span class="nr-road-label">${road.name.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</span>`,
-          iconSize: [0, 0]
-        })
-      }).addTo(nrMap)
-    );
-  }
-}
-
+function nrRenderStats(){const total=nrPool.length;const e=document.getElementById('nr-count');if(e)e.textContent=`${nrDone.size} / ${total}`;const p=document.getElementById('nr-progress');if(p)p.style.width=(total?nrDone.size/total*100:0)+'%';const score=document.getElementById('nr-score');if(score)score.textContent=String(nrScore);const list=document.getElementById('nr-done-list');if(list)list.textContent=nrPool.filter(x=>nrDone.has(x.name)).map(x=>x.name).join(' · ')||'Correctly named roads will appear here.'}
+function nrPaint(){if(!nrMap)return;nrLabels.forEach(x=>nrMap.removeLayer(x));nrLabels=[];nrLayers.forEach(o=>{o.layer.eachLayer(segment=>segment.setStyle(nrDone.has(o.road.name)?{color:'#24a77d',weight:6,opacity:0.9}:o.index===nrCurrent?{color:'#f1aa30',weight:9,opacity:1}:{color:'#718b8f',weight:2,opacity:0.05}));if(nrDone.has(o.road.name)){o.layer.eachLayer(l=>{l.bringToFront?.()})}});for(const r of nrPool.filter(x=>nrDone.has(x.name))){let seg=r.parts.reduce((a,b)=>a.length>=b.length?a:b,[]);if(!seg.length)continue;let pos=seg[Math.floor(seg.length/2)];nrLabels.push(L.marker(pos,{interactive:false,icon:L.divIcon({className:'',html:`<span class="nr-road-label">${r.name.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</span>`,iconSize:[0,0]})}).addTo(nrMap))}}
 function nrPick(){const e=document.getElementById('nr-answer');if(!e)return;const left=nrPool.map((x,i)=>i).filter(i=>!nrDone.has(nrPool[i].name)&&i!==nrCurrent);if(!left.length){nrCurrent=-1;nrPaint();nrStatus('Area mastered! Every road in this starter set is labeled. Restart to practice again.','nr-ok');document.getElementById('nr-prompt').textContent='Area complete 🎉';e.disabled=true;document.getElementById('nr-submit').disabled=true;document.getElementById('nr-skip').disabled=true;nrRenderStats();return}nrCurrent=left[Math.floor(Math.random()*left.length)];const r=nrPool[nrCurrent];nrPaint();const bounds=L.latLngBounds(r.parts.flat());if(bounds.isValid())nrMap.fitBounds(bounds.pad(.8),{maxZoom:16,animate:false});document.getElementById('nr-prompt').textContent='Name the road highlighted in orange';e.value='';e.disabled=false;e.focus();nrStatus('Type the road name. You can retry or skip; missed roads return later.');nrRenderStats()}
 function nrGuess(ev){ev?.preventDefault();if(nrCurrent<0||nrBusy)return;const e=document.getElementById('nr-answer'),v=e.value.trim();if(!v)return;const r=nrPool[nrCurrent];nrTries[r.name]=(nrTries[r.name]||0)+1;if(nrAliases(r).includes(nrNormalize(v))){nrDone.add(r.name);nrScore+=Math.max(2,10-(nrTries[r.name]-1)*3-(nrSkips[r.name]||0)*2);nrPaint();nrStatus('Correct — '+r.name+'. That road is now labeled in green.','nr-ok');nrRenderStats();nrBusy=true;setTimeout(()=>{nrBusy=false;if(tab==='nameroad')nrPick()},850)}else{nrStatus('Not quite. Try again, or skip to return to this road later.','nr-error');e.select()}}
 function nrSkip(){if(nrCurrent<0)return;const r=nrPool[nrCurrent];nrSkips[r.name]=(nrSkips[r.name]||0)+1;nrCurrent=-1;nrPick()}
 function nrRestart(){nrDone=new Set();nrTries={};nrSkips={};nrScore=0;nrCurrent=-1;nrPaint();nrPick()}
-function renderNameRoad(){view.innerHTML=`<div class="nr-layout"><div class="panel"><div class="eyebrow">Craven County · Downtown New Bern starter area</div><h2>Name That Road</h2><p>Real roads, no visible names. Identify each orange road by typing its name; correctly identified streets turn green and stay labeled.</p><div class="nr-map" id="nr-map"><div class="nr-spinner" id="nr-loading">Loading real New Bern roads from OpenStreetMap…</div></div><p class="small">Street geometry and road names © OpenStreetMap contributors (ODbL). Public data can be incomplete; this is a starter set, not every road in Craven County.</p></div><div class="panel"><div class="eyebrow">Road memory challenge</div><div class="nr-row" style="justify-content:space-between"><div><div class="small muted">Roads learned</div><div class="nr-kpi" id="nr-count">0 / 0</div></div><div><div class="small muted">Points</div><div class="nr-kpi" id="nr-score">0</div></div></div><div class="progress" style="margin:12px 0 25px"><div id="nr-progress"></div></div><h3 id="nr-prompt">Loading streets…</h3><form onsubmit="nrGuess(event)"><div class="nr-row"><input id="nr-answer" class="nr-input" aria-label="Road name" placeholder="Type road name" autocomplete="off" disabled/><button class="btn" id="nr-submit" disabled>Check ↵</button></div></form><p id="nr-status" class="nr-help" aria-live="polite">Building your road set…</p><div class="nr-row"><button class="btn secondary" id="nr-skip" onclick="nrSkip()" disabled>Skip · revisit later</button><button class="btn secondary" onclick="nrRestart()">Restart</button></div><div class="divider"></div><h3>Learned roads</h3><p class="small" id="nr-done-list">Correctly named roads will appear here.</p><div class="notice">Future release: Fastest Route Simulator will use connected road geometry and legal travel times, including practice closures. First we master road recognition.</div></div></div>`;nrInit()}
-
-async function nrGetData() {
-  const response = await fetch('./roads.json', {
-    cache: 'no-cache'
-  });
-
-  if (!response.ok) {
-    throw new Error('Could not load roads.json: HTTP ' + response.status);
-  }
-
-  const data = await response.json();
-
-  if (!Array.isArray(data.elements) || !data.elements.length) {
-    throw new Error('The road-data file is empty.');
-  }
-
+function renderNameRoad(){view.innerHTML=`<div class="nr-layout"><div class="panel"><div class="eyebrow">Craven County · Downtown New Bern starter area</div><h2>Name That Road</h2><p>Learn downtown New Bern on a geographically detailed street map. Street labels stay hidden; name the orange road, then it turns green and stays labeled.</p><div class="nr-map" id="nr-map"><div class="nr-spinner" id="nr-loading">Loading New Bern roads and geographic background…</div></div><p id="nr-map-note" class="small">Using saved OpenStreetMap geography; run the updated Build Road Data workflow to install the detailed unlabeled background.</p><p class="small">Geographic data © OpenStreetMap contributors (ODbL). This first lesson covers downtown New Bern; neighborhood selection is coming after data coverage is expanded.</p></div><div class="panel"><div class="eyebrow">Road memory challenge</div><div class="nr-row" style="justify-content:space-between"><div><div class="small muted">Roads learned</div><div class="nr-kpi" id="nr-count">0 / 0</div></div><div><div class="small muted">Points</div><div class="nr-kpi" id="nr-score">0</div></div></div><div class="progress" style="margin:12px 0 25px"><div id="nr-progress"></div></div><h3 id="nr-prompt">Loading streets…</h3><form onsubmit="nrGuess(event)"><div class="nr-row"><input id="nr-answer" class="nr-input" aria-label="Road name" placeholder="Type road name" autocomplete="off" disabled/><button class="btn" id="nr-submit" disabled>Check ↵</button></div></form><p id="nr-status" class="nr-help" aria-live="polite">Building your road set…</p><div class="nr-row"><button class="btn secondary" id="nr-skip" onclick="nrSkip()" disabled>Skip · revisit later</button><button class="btn secondary" onclick="nrRestart()">Restart</button></div><div class="divider"></div><h3>Learned roads</h3><p class="small" id="nr-done-list">Correctly named roads will appear here.</p><div class="notice">Future release: Fastest Route Simulator will use connected road geometry and legal travel times, including practice closures. First we master road recognition.</div></div></div>`;nrInit()}
+async function nrGetData(){
+  // Read road geometry stored alongside this site, rather than querying a live API from every visitor's browser.
+  const url=new URL('roads.json',window.location.href);url.search='';
+  const response=await fetch(url.toString(),{cache:'no-store'});
+  if(!response.ok)throw Error('roads.json is not available (HTTP '+response.status+'). Run the Build Road Data workflow in GitHub Actions.');
+  const data=await response.json();
+  if(!Array.isArray(data.elements)||!data.elements.length)throw Error('The saved road dataset is empty.');
   return data.elements;
 }
-async function nrInit(){try{await loadLeaflet();if(tab!=='nameroad')return;let root=document.getElementById('nr-map');if(!root)return;if(nrMap){nrMap.remove();nrMap=null}nrMap=L.map(root,{zoomControl:true,attributionControl:true,minZoom:11}).setView([35.109,-77.042],14);
-                            
-L.tileLayer(
-  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-  {
-    attribution: 'Imagery © Esri and its data providers',
-    maxZoom: 19
-  }
-).addTo(nrMap);
 
-const els=await nrGetData();if(tab!=='nameroad'||!document.getElementById('nr-map')){nrMap?.remove();nrMap=null;return}let groups=new Map();for(const w of els){const name=w.tags?.name,pts=w.geometry?.map(p=>[p.lat,p.lon]);if(!name||!pts?.length||!w.tags.highway||['footway','path','cycleway','steps','pedestrian','track','service'].includes(w.tags.highway))continue;const d=nrDistance(pts);if(d<40)continue;const key=nrNormalize(name);if(!groups.has(key))groups.set(key,{name,parts:[],alts:[],len:0});const r=groups.get(key);r.parts.push(pts);r.len+=d;if(w.tags.ref)r.alts.push(...w.tags.ref.split(';').map(x=>x.trim()))}
+// RoadWise cartographic base map. These are OpenStreetMap shapes saved as
+// local map-background.json: roads, waterways, parks, and buildings.
+// No road names are rendered; the quiz overlay is always separate.
+async function rwDrawBaseMap(map){
+  const url=new URL('map-background.json',location.href);url.search='';
+  let response;
+  try{ response=await fetch(url.toString(),{cache:'no-store'}); }
+  catch(e){rwNotice('Local background not available yet. Generate map-background.json in GitHub Actions.');return;}
+  if(!response.ok){rwNotice('Detailed map not installed yet. Run Build Road Data in GitHub Actions to generate map-background.json.');return;}
+  let payload=await response.json();
+  if(!Array.isArray(payload.features))throw new Error('Bad map-background.json structure');
+  const categories={water:[],green:[],buildings:[],roads:[]};
+  for(const item of payload.features){if(categories[item.kind])categories[item.kind].push(item);}
+  const polygon=(g,color,edge)=>L.polygon(g,{color:edge||color,weight:.5,fillColor:color,fillOpacity:.93,interactive:false});
+  const length=items=>items.reduce((n,x)=>n+(x.coords?.length||0),0);
+  for(const item of categories.green){ if(item.polygon&&item.coords.length>2)polygon(item.coords,'#c9debb','#bfd3b6').addTo(map); }
+  for(const item of categories.water){
+    if(item.polygon&&item.coords.length>2)polygon(item.coords,'#a7d4e4','#94c4d4').addTo(map);
+    else if(item.coords.length>1)L.polyline(item.coords,{color:'#90bfd1',weight:3,interactive:false}).addTo(map);
+  }
+  for(const item of categories.buildings){if(item.coords.length>2)polygon(item.coords,'#d8d3cb','#c9c2ba').addTo(map);}
+  const width={motorway:9,trunk:8,primary:7,secondary:6,tertiary:5,residential:3.7,unclassified:3,service:2.3,living_street:3,footway:1.2,cycleway:1};
+  for(const item of categories.roads){
+    if(item.coords.length<2)continue;
+    const w=width[item.subtype]||2.7;
+    L.polyline(item.coords,{color:'#b4bab5',weight:w+1.4,opacity:.9,interactive:false}).addTo(map);
+    L.polyline(item.coords,{color:'#ffffff',weight:w,opacity:1,interactive:false}).addTo(map);
+  }
+  rwNotice(`Detailed unlabeled map: ${categories.roads.length} road segments, ${categories.buildings.length} buildings, ${categories.water.length} water features and ${categories.green.length} green areas. Data © OpenStreetMap contributors.`);
+}
+function rwNotice(message){const el=document.getElementById('nr-map-note');if(el)el.textContent=message;}
+
+async function nrInit(){try{await loadLeaflet();if(tab!=='nameroad')return;let root=document.getElementById('nr-map');if(!root)return;if(nrMap){nrMap.remove();nrMap=null}nrMap=L.map(root,{zoomControl:true,attributionControl:true,minZoom:11}).setView([35.109,-77.042],14);await rwDrawBaseMap(nrMap);const els=await nrGetData();if(tab!=='nameroad'||!document.getElementById('nr-map')){nrMap?.remove();nrMap=null;return}let groups=new Map();for(const w of els){const name=w.tags?.name,pts=w.geometry?.map(p=>[p.lat,p.lon]);if(!name||!pts?.length||!w.tags.highway||['footway','path','cycleway','steps','pedestrian','track','service'].includes(w.tags.highway))continue;const d=nrDistance(pts);if(d<40)continue;const key=nrNormalize(name);if(!groups.has(key))groups.set(key,{name,parts:[],alts:[],len:0});const r=groups.get(key);r.parts.push(pts);r.len+=d;if(w.tags.ref)r.alts.push(...w.tags.ref.split(';').map(x=>x.trim()))}
 // Select the most substantial named roads in a compact, verified geographic area.
-nrPool=[...groups.values()].filter(x=>x.len>=170).sort((a,b)=>b.len-a.len).slice(0,20);if(nrPool.length<3)throw Error('Not enough named roads found in the selected area.');nrLayers=nrPool.map((road,index)=>({road,index,layer:L.featureGroup(road.parts.map(part=>L.polyline(part,{color:'#889c9b',weight:3,opacity:.7}))).addTo(nrMap)}));nrMap.fitBounds(L.latLngBounds(nrPool.flatMap(r=>r.parts.flat())).pad(.08),{maxZoom:14});document.getElementById('nr-loading')?.remove();nrLoaded=true;nrRestart();setTimeout(()=>nrMap?.invalidateSize(),100)}catch(err){const e=document.getElementById('nr-loading');if(e)e.textContent='Could not load road geometry: '+err.message+' Reload the tab to retry. The regular Explore Map remains available.';nrStatus('Unable to start yet. This mode needs access to the OpenStreetMap Overpass data service.','nr-error')}}
+nrPool=[...groups.values()].filter(x=>x.len>=170).sort((a,b)=>b.len-a.len).slice(0,20);if(nrPool.length<3)throw Error('Not enough named roads found in the selected area.');nrLayers=nrPool.map((road,index)=>({road,index,layer:L.featureGroup(road.parts.map(part=>L.polyline(part,{color:'#889c9b',weight:3,opacity:.7}))).addTo(nrMap)}));nrMap.fitBounds(L.latLngBounds(nrPool.flatMap(r=>r.parts.flat())).pad(.08),{maxZoom:14});document.getElementById('nr-loading')?.remove();nrLoaded=true;nrRestart();setTimeout(()=>nrMap?.invalidateSize(),100)}catch(err){const e=document.getElementById('nr-loading');if(e)e.textContent='Could not load road geometry: '+err.message+' After installing roads.json, refresh this page. The map below does not require any tiles.';nrStatus('Road data is not installed yet. Run the Build Road Data workflow in GitHub Actions.','nr-error')}}
 
 updateProgress();render();
 </script></body></html>
